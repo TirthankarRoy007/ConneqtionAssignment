@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Form</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Employee Form</h2>
+    <form id="employeeForm">
+      <div class="form-group">
+        <label for="employeeName">Employee Name:</label>
+        <input type="text" class="form-control" id="employeeName" required>
+      </div>
+      <div class="form-group">
+        <label for="employeeId">Employee ID:</label>
+        <input type="text" class="form-control" id="employeeId" required>
+      </div>
+      <div class="form-group">
+        <label for="employeeBirthdate">Employee Birthdate:</label>
+        <input type="text" class="form-control" id="employeeBirthdate" placeholder="MM-DD-YYYY" required>
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="mobileNumber">Mobile Number:</label>
+        <input type="text" class="form-control" id="mobileNumber" placeholder="XXX-XXX-XXXX" required>
+      </div>
+      <div class="form-group">
+        <label for="department">Department:</label>
+        <select class="form-control" id="department" required>
+          <option value="">Select Department</option>
+          <option value="IT">IT</option>
+          <option value="HR">HR</option>
+          <option value="Management">Management</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <br>
+    <div class="form-group">
+      <label for="search">Search:</label>
+      <input type="text" class="form-control" id="search" onkeyup="filterTable()" placeholder="Type to search">
+    </div>
+    <table class="table table-striped" id="employeeTable">
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Employee ID</th>
+          <th>Employee Birthdate</th>
+          <th>Gender</th>
+          <th>Mobile Number</th>
+          <th>Department</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    document.getElementById('employeeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (validateForm()) {
+        saveFormData();
+        resetForm();
+      }
+    });
+
+    function validateForm() {
+      let employeeName = document.getElementById('employeeName').value;
+      let employeeId = document.getElementById('employeeId').value;
+      let employeeBirthdate = document.getElementById('employeeBirthdate').value;
+      let gender = document.getElementById('gender').value;
+      let mobileNumber = document.getElementById('mobileNumber').value;
+      let department = document.getElementById('department').value;
+
+      if (!employeeName || !employeeId || !employeeBirthdate || !gender || !mobileNumber || !department) {
+        alert('Please fill in all required fields.');
+        return false;
+      }
+
+      return true;
+    }
+
+    function saveFormData() {
+      let employeeName = document.getElementById('employeeName').value;
+      let employeeId = document.getElementById('employeeId').value;
+      let employeeBirthdate = document.getElementById('employeeBirthdate').value;
+      let gender = document.getElementById('gender').value;
+      let mobileNumber = document.getElementById('mobileNumber').value;
+      let department = document.getElementById('department').value;
+
+      let tableBody = document.getElementById('tableBody');
+      let tableRow = document.createElement('tr');
+
+      tableRow.innerHTML = `
+        <td>${employeeName}</td>
+        <td>${employeeId}</td>
+        <td>${employeeBirthdate}</td>
+        <td>${gender}</td>
+        <td>${mobileNumber}</td>
+        <td>${department}</td>
+      `;
+
+      tableBody.appendChild(tableRow);
+    }
+
+    function resetForm() {
+      document.getElementById('employeeForm').reset();
+    }
+
+    function filterTable() {
+      let searchValue = document.getElementById('search').value.toLowerCase();
+      let rows = document.getElementById('employeeTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+      for (let i = 0; i < rows.length; i++) {
+        let cells = rows[i].getElementsByTagName('td');
+        let match = false;
+
+        for (let j = 0; j < cells.length; j++) {
+          let cellText = cells[j].textContent.toLowerCase();
+          if (cellText.includes(searchValue)) {
+            match = true;
+            break;
+          }
+        }
+
+        rows[i].style.display = match ? '' : 'none';
+      }
+    }
+  </script>
+</body>
+</html>
